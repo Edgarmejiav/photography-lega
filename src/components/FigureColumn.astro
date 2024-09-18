@@ -6,8 +6,8 @@ interface Props {
 }
 const {title, url, year} = Astro.props;
 ---
-<figure class="my-4">
-    <img class="rounded-3xl" src={url} alt={title} title={title} height="" width="">
+<figure class="sm:my-4 my-1">
+    <img class="sm:rounded-3xl rounded-xl " src={url} alt={title} title={title} height="" width="">
     <figcaption class="text-center">
         <span>{title}</span> <span>{year}</span>
     </figcaption>
