@@ -1,0 +1,103 @@
+---
+import FigureColumn from "./FigureColumn.astro";
+import ims from "../../public/img/1.webp";
+---
+<div class="columns text-white gap-20 mx-20 ">
+    <div class="column column-reverse">
+        <FigureColumn
+                      url="../../public/img/1.webp"
+                      year="2022"/>
+        <FigureColumn
+                      url="../../public/img/16.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/3.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/4.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/5.webp"
+                      year="2023"/>
+    </div>
+    <div class="column">
+        <FigureColumn
+                      url="../../public/img/6.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/7.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/8.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/9.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/10.webp"
+                      year="2023"/>
+    </div>
+    <div class="column column-reverse">
+        <FigureColumn
+                      url="../../public/img/11.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/12.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/13.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/14.webp"
+                      year="2023"/>
+        <FigureColumn
+                      url="../../public/img/15.webp"
+                      year="2023"/>
+
+    </div>
+    <style>
+        /* Three column layout */
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Shift entire column up, but not so much that it goes out of view */
+        .column-reverse {
+            transform: translateY(calc(-100% + 100vh));
+        }
+
+        /* As we're about to shift content out of .columns, we need it to hide its overflow */
+        .columns {
+            overflow-y: hidden;
+        }
+
+        /* Flip item order in reversed columns */
+        .column-reverse {
+            flex-direction: column-reverse;
+        }
+
+        /* Set up Animation */
+        @keyframes adjust-position {
+            /* Start position: shift entire column up, but not so that it goes out of view */
+            from {
+                transform: translateY(calc(-100% + 100vh));
+            }
+
+            /* End position: shift entire column down, but not so that it goes out of view */
+            to {
+                transform: translateY(calc(100% - 100vh));
+            }
+        }
+
+        /* Hook our animation with the timeline to our columns */
+        .column-reverse {
+            animation: adjust-position linear forwards;
+            animation-timeline: scroll(root block);
+        }
+    </style>

@@ -1,0 +1,14 @@
+---
+interface Props {
+    title?: string;
+    url: string
+    year: string
+}
+const {title, url, year} = Astro.props;
+---
+<figure class="my-4">
+    <img class="rounded-3xl" src={url} alt={title} title={title} height="" width="">
+    <figcaption class="text-center">
+        <span>{title}</span> <span>{year}</span>
+    </figcaption>
+</figure>
