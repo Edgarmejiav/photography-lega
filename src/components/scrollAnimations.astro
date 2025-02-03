@@ -6,7 +6,7 @@ import FigureColumn from "./FigureColumn.astro";
 <h1 class="px-24 text-4xl text-white pt-10 pb-8 font-bold">PORTFOLIO</h1>
 
 <div class="columns text-white md:gap-4 gap-1 md:mx-20 mx-4 ">
-    <div class="column column-reverse">
+    <div class="column md:gap-4 gap-1 column-reverse">
         <FigureColumn
                 url="/img/1.webp"
                 />
@@ -41,7 +41,7 @@ import FigureColumn from "./FigureColumn.astro";
 
 
     </div>
-    <div class="column">
+    <div class="column md:gap-4 gap-1">
         <FigureColumn
                 url="/img/6.webp"
                 />
@@ -76,7 +76,7 @@ import FigureColumn from "./FigureColumn.astro";
                 />
 
     </div>
-    <div class="column column-reverse">
+    <div class="column md:gap-4 gap-1 column-reverse">
         <FigureColumn
                 url="/img/11.webp"
                 />
@@ -114,49 +114,50 @@ import FigureColumn from "./FigureColumn.astro";
     </div>
 
     </div>
-    <style>
-        /* Three column layout */
-        .columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
+    </div>
+<style>
+    /* Three column layout */
+    .columns {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-        .column {
-            display: flex;
-            flex-direction: column;
-        }
+    .column {
+        display: flex;
+        flex-direction: column;
+    }
 
-        /* Shift entire column up, but not so much that it goes out of view */
-        .column-reverse {
+    /* Shift entire column up, but not so much that it goes out of view */
+    .column-reverse {
+        transform: translateY(calc(-100% + 100vh));
+    }
+
+    /* As we're about to shift content out of .columns, we need it to hide its overflow */
+    .columns {
+        overflow-y: hidden;
+    }
+
+    /* Flip item order in reversed columns */
+    .column-reverse {
+        flex-direction: column-reverse;
+    }
+
+    /* Set up Animation */
+    @keyframes adjust-position {
+        /* Start position: shift entire column up, but not so that it goes out of view */
+        from {
             transform: translateY(calc(-100% + 100vh));
         }
 
-        /* As we're about to shift content out of .columns, we need it to hide its overflow */
-        .columns {
-            overflow-y: hidden;
+        /* End position: shift entire column down, but not so that it goes out of view */
+        to {
+            transform: translateY(calc(100% - 100vh));
         }
+    }
 
-        /* Flip item order in reversed columns */
-        .column-reverse {
-            flex-direction: column-reverse;
-        }
-
-        /* Set up Animation */
-        @keyframes adjust-position {
-            /* Start position: shift entire column up, but not so that it goes out of view */
-            from {
-                transform: translateY(calc(-100% + 100vh));
-            }
-
-            /* End position: shift entire column down, but not so that it goes out of view */
-            to {
-                transform: translateY(calc(100% - 100vh));
-            }
-        }
-
-        /* Hook our animation with the timeline to our columns */
-        .column-reverse {
-            animation: adjust-position linear forwards;
-            animation-timeline: scroll(root block);
-        }
-    </style>
+    /* Hook our animation with the timeline to our columns */
+    .column-reverse {
+        animation: adjust-position linear forwards;
+        animation-timeline: scroll(root block);
+    }
+</style>
