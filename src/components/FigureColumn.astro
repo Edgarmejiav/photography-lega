@@ -7,9 +7,42 @@ interface Props {
 const {title, url, year} = Astro.props;
 ---
 <figure class="overflow-hidden ">
-    <img class="animate-fade-in transition duration-500 transform scale-100 hover:scale-125" src={url} alt={title} title={title} height="" width="">
+    <img loading="lazy" class="animate-fade-in transition duration-500 transform scale-100 hover:scale-125" src={url} alt={title} title={title} height="" width="">
 
     <figcaption class="text-center ">
         <span>{title}</span> <span>{year}</span>
     </figcaption>
 </figure>
+
+<style>
+    figure {
+        margin: 0;
+        padding: 0;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+    }
+
+    figcaption {
+        font-size: 0.8rem;
+        font-weight: 300;
+        color: #333;
+    }
+    .animate-fade-in {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+    .hover\:scale-125:hover {
+        transform: scale(1.25);
+    }
+</style>
