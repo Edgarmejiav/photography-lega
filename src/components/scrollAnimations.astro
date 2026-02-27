@@ -1,142 +1,48 @@
 ---
 import FigureColumn from "./FigureColumn.astro";
+
+const col1 = [
+    "/img/17.webp", "/img/18.webp", "/img/19.webp", "/img/20.webp", "/img/21.webp",
+    "/img/1.webp", "/img/37.webp", "/img/38.webp", "/img/4.webp", "/img/7.webp",
+    "/img/41.webp", "/img/20.webp"
+];
+const col2 = [
+    "/img/22.webp", "/img/23.webp", "/img/24.webp", "/img/25.webp", "/img/26.webp",
+    "/img/6.webp", "/img/16.webp", "/img/39.webp", "/img/9.webp", "/img/40.webp",
+    "/img/42.webp", "/img/45.webp"
+];
+const col3 = [
+    "/img/27.webp", "/img/28.webp", "/img/29.webp", "/img/30.webp", "/img/31.webp",
+    "/img/32.webp", "/img/33.webp", "/img/34.webp", "/img/35.webp", "/img/36.webp",
+    "/img/43.webp", "/img/44.webp"
+];
+
+const columns = [col1, col2, col3];
 ---
-<div class="  container mx-auto">
+<div class="container mx-auto">
 
-<h1 class="xl:px-24 px-2 xl:text-4xl  text-white xl:pt-10 pt-2 xl:pb-8 pb-2 font-bold">PORTFOLIO</h1>
+    <h1 class="xl:px-24 px-2 xl:text-4xl text-white xl:pt-10 pt-2 xl:pb-8 pb-2 font-bold">PORTFOLIO</h1>
 
-<div class="columns text-white xl:gap-4  gap-1 xl:px-24 px-1">
-    <div class="column xl:gap-4 gap-1 column-reverse">
-
-        <!--repeat-->
-        <FigureColumn
-                url="/img/17.webp"
-                />
-        <FigureColumn
-                url="/img/18.webp"
-                />
-        <FigureColumn
-                url="/img/19.webp"
-                />
-        <FigureColumn
-                url="/img/20.webp"
-                />
-        <FigureColumn
-                url="/img/21.webp"
-                />
-    <!--new-->
-        <FigureColumn
-                url="/img/1.webp"
-        />
-        <FigureColumn
-                url="/img/37.webp"
-        />
-        <FigureColumn
-                url="/img/38.webp"
-        />
-        <FigureColumn
-                url="/img/4.webp"
-        />
-        <FigureColumn
-                url="/img/7.webp"
-        />   <FigureColumn
-                url="/img/41.webp"
-        />
-        <FigureColumn
-                url="/img/20.webp"
-        />
+    <div class="columns text-white xl:gap-4 gap-1 xl:px-24 px-1">
+        {columns.map((col, index) => (
+            <div class={`column xl:gap-4 gap-1 ${index % 2 === 0 ? 'column-reverse' : ''}`}>
+                {col.map((url) => (
+                    <FigureColumn
+                        url={url}
+                        title={`Foto ${url.split('/').pop().split('.')[0]}`}
+                    />
+                ))}
+            </div>
+        ))}
     </div>
-    <div class="column xl:gap-4 gap-1">
+</div>
 
-        <!--repeat-->
-        <FigureColumn
-                url="/img/22.webp"
-                />
-        <FigureColumn
-                url="/img/23.webp"
-                />
-        <FigureColumn
-                url="/img/24.webp"
-                />
-        <FigureColumn
-                url="/img/25.webp"
-                />
-        <FigureColumn
-                url="/img/26.webp"
-                />
-        <!--new-->
-        <FigureColumn
-                url="/img/6.webp"
-        />
-        <FigureColumn
-                url="/img/16.webp"
-        />
-        <FigureColumn
-                url="/img/39.webp"
-        />
-        <FigureColumn
-                url="/img/9.webp"
-        />
-        <FigureColumn
-                url="/img/40.webp"
-        />     <FigureColumn
-                url="/img/42.webp"
-        />
-        <FigureColumn
-                url="/img/45.webp"
-        />
-    </div>
-    <div class="column xl:gap-4 gap-1 column-reverse">
-
-        <!--repeat-->
-
-
-        <FigureColumn
-                url="/img/27.webp"
-                />
-        <FigureColumn
-                url="/img/28.webp"
-                />
-        <FigureColumn
-                url="/img/29.webp"
-                />
-        <FigureColumn
-                url="/img/30.webp"
-                />
-        <FigureColumn
-                url="/img/31.webp"
-                />
-        <!--new-->
-        <FigureColumn
-                url="/img/32.webp"
-        />
-        <FigureColumn
-                url="/img/33.webp"
-        />
-        <FigureColumn
-                url="/img/34.webp"
-        />
-        <FigureColumn
-                url="/img/35.webp"
-        />
-        <FigureColumn
-                url="/img/36.webp"
-        />
-        <FigureColumn
-                url="/img/43.webp"
-        />        <FigureColumn
-                url="/img/44.webp"
-        />
-
-    </div>
-
-    </div>
-    </div>
 <style>
-    /* Three column layout */
+    /* Base styles (Mobile first) */
     .columns {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .column {
@@ -144,65 +50,77 @@ import FigureColumn from "./FigureColumn.astro";
         flex-direction: column;
     }
 
-    /* Shift entire column up, but not so much that it goes out of view */
-    .column-reverse {
-        transform: translateY(calc(-100% + 100vh));
-    }
+    /* Desktop / Large screens configuration */
+    @media (min-width: 1024px) {
+        /* Three column layout */
+        .columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            overflow-y: hidden;
+        }
 
-    /* As we're about to shift content out of .columns, we need it to hide its overflow */
-    .columns {
-        overflow-y: hidden;
-    }
-
-    /* Flip item order in reversed columns */
-    .column-reverse {
-        flex-direction: column-reverse;
-    }
-
-    /* Set up Animation */
-    @keyframes adjust-position {
-        /* Start position: shift entire column up, but not so that it goes out of view */
-        from {
+        /* Shift entire column up, but not so much that it goes out of view */
+        .column-reverse {
             transform: translateY(calc(-100% + 100vh));
+            flex-direction: column-reverse;
         }
 
-        /* End position: shift entire column down, but not so that it goes out of view */
-        to {
-            transform: translateY(calc(100% - 100vh));
-        }
-    }
+        /* Set up Animation */
+        @keyframes adjust-position {
+            /* Start position: shift entire column up */
+            from {
+                transform: translateY(calc(-100% + 100vh));
+            }
 
-    /* Hook our animation with the timeline to our columns */
-    .column-reverse {
-        animation: adjust-position linear forwards;
-        animation-timeline: scroll(root block);
+            /* End position: shift entire column down */
+            to {
+                transform: translateY(calc(100% - 100vh));
+            }
+        }
+
+        /* Hook our animation with the timeline to our columns */
+        .column-reverse {
+            animation: adjust-position linear forwards;
+            animation-timeline: scroll(root block);
+        }
     }
 </style>
 
-<script>// As we're about to shift content out of .columns, we need it to hide its overflow
-document.querySelector(".columns").style.overflowY = "hidden";
+<script>
+    // Only run animation logic on large screens where the layout supports it
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+        const columnsContainer = document.querySelector(".columns");
 
-// Set up timeline
-const timeline = new ScrollTimeline({
-    source: document.documentElement,
-});
+        if (columnsContainer) {
+            // As we're about to shift content out of .columns, we need it to hide its overflow
+            columnsContainer.style.overflowY = "hidden";
 
-// Loop all eligible columns
-document.querySelectorAll(".column-reverse").forEach(($column) => {
-    // Flip item order in reverse columns
-    $column.style.flexDirection = "column-reverse";
+            // Check if ScrollTimeline is supported before using it
+            if (typeof ScrollTimeline !== 'undefined') {
+                const timeline = new ScrollTimeline({
+                    source: document.documentElement,
+                });
 
-    // Hook Animation
-    $column.animate(
-        {
-            transform: [
-                "translateY(calc(-100% + 100vh))",
-                "translateY(calc(100% - 100vh))"
-            ]
-        },
-        {
-            fill: "both",
-            timeline
+                // Loop all eligible columns
+                document.querySelectorAll(".column-reverse").forEach(($column) => {
+                    // Flip item order in reverse columns
+                    $column.style.flexDirection = "column-reverse";
+
+                    // Hook Animation
+                    $column.animate(
+                        {
+                            transform: [
+                                "translateY(calc(-100% + 100vh))",
+                                "translateY(calc(100% - 100vh))"
+                            ]
+                        },
+                        {
+                            fill: "both",
+                            timeline
+                        }
+                    );
+                });
+            }
         }
-    );
-});</script>
+    }
+</script>
