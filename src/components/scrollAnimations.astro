@@ -8,11 +8,11 @@ const col1 = [
 ];
 const col2 = [
     "/img/22.webp", "/img/23.webp", "/img/24.webp", "/img/25.webp", "/img/26.webp",
-    "/img/27.webp", "/img/16.webp", "/img/39.webp", "/img/9.webp", "/img/40.webp",
+    "/img/6.webp", "/img/16.webp", "/img/39.webp", "/img/9.webp", "/img/40.webp",
     "/img/42.webp", "/img/45.webp"
 ];
 const col3 = [
-    "/img/6.webp", "/img/28.webp", "/img/29.webp", "/img/30.webp", "/img/31.webp",
+    "/img/27.webp", "/img/28.webp", "/img/29.webp", "/img/30.webp", "/img/31.webp",
     "/img/32.webp", "/img/33.webp", "/img/34.webp", "/img/35.webp", "/img/36.webp",
     "/img/43.webp", "/img/44.webp"
 ];
@@ -30,7 +30,7 @@ const columns = [col1, col2, col3];
         <div class="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black via-black/80 to-transparent z-10"></div>
         <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent z-10"></div>
 
-        <div class="columns grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        <div class="columns grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {columns.map((col, index) => (
                 <div class={`column flex flex-col gap-8 lg:gap-12 ${index % 2 !== 0 ? 'column-reverse' : ''}`}>
                     {col.map((url) => (
@@ -55,30 +55,34 @@ const columns = [col1, col2, col3];
 
     /* Configuración solo para escritorio */
     @media (min-width: 1024px) {
-        /* La columna central se mueve en dirección opuesta (hacia arriba) al hacer scroll hacia abajo */
-        .column-reverse {
-            transform: translateY(0); /* Punto inicial */
+        /* 
+           Lógica de Parallax para alinear el final:
+           Para que el footer quede pegado a las fotos al final del scroll,
+           todas las columnas deben terminar en 'transform: translateY(0)'.
+           
+           El efecto parallax se logra variando el punto de INICIO (from).
+        */
+
+        /* Columnas laterales (1 y 3): Empiezan desplazadas hacia abajo y suben a su posición natural */
+        @keyframes scroll-parallax-sides {
+            from { transform: translateY(50px); }
+            to { transform: translateY(0); }
         }
 
-        /* Definimos la animación vinculada al scroll */
-        @keyframes scroll-up {
-            from { transform: translateY(10%); }
-            to { transform: translateY(-40%); }
-        }
-
-        @keyframes scroll-down {
-            from { transform: translateY(-40%); }
-            to { transform: translateY(10%); }
+        /* Columna central (2): Empieza desplazada hacia arriba y baja a su posición natural */
+        @keyframes scroll-parallax-center {
+            from { transform: translateY(-50px); }
+            to { transform: translateY(0); }
         }
 
         /* Aplicamos las animaciones */
         .column:not(.column-reverse) {
-            animation: scroll-up linear;
+            animation: scroll-parallax-sides linear;
             animation-timeline: scroll(root block);
         }
 
         .column-reverse {
-            animation: scroll-down linear;
+            animation: scroll-parallax-center linear;
             animation-timeline: scroll(root block);
         }
     }
@@ -87,13 +91,9 @@ const columns = [col1, col2, col3];
 <script>
     // Fallback para navegadores que no soporten CSS Scroll Timeline nativo
     if (window.matchMedia("(min-width: 1024px)").matches) {
-        // Verificamos soporte de CSS puro, si no, usamos JS (opcional, pero recomendado para compatibilidad)
         const isScrollTimelineSupported = CSS.supports("animation-timeline: scroll()");
-
         if (!isScrollTimelineSupported) {
-            console.log("CSS Scroll Timeline no soportado, activando fallback JS...");
-            // Aquí podrías añadir un fallback con IntersectionObserver o evento scroll si fuera crítico
-            // Por ahora, el diseño degradará elegantemente a columnas estáticas.
+            console.log("CSS Scroll Timeline no soportado. Las columnas se mostrarán estáticas.");
         }
     }
 </script>
