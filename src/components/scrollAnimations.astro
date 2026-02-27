@@ -8,119 +8,92 @@ const col1 = [
 ];
 const col2 = [
     "/img/22.webp", "/img/23.webp", "/img/24.webp", "/img/25.webp", "/img/26.webp",
-    "/img/6.webp", "/img/16.webp", "/img/39.webp", "/img/9.webp", "/img/40.webp",
+    "/img/27.webp", "/img/16.webp", "/img/39.webp", "/img/9.webp", "/img/40.webp",
     "/img/42.webp", "/img/45.webp"
 ];
 const col3 = [
-    "/img/27.webp", "/img/28.webp", "/img/29.webp", "/img/30.webp", "/img/31.webp",
+    "/img/6.webp", "/img/28.webp", "/img/29.webp", "/img/30.webp", "/img/31.webp",
     "/img/32.webp", "/img/33.webp", "/img/34.webp", "/img/35.webp", "/img/36.webp",
     "/img/43.webp", "/img/44.webp"
 ];
 
 const columns = [col1, col2, col3];
 ---
-<div class="container mx-auto">
+<div class="container mx-auto px-4 py-24 max-w-[1400px]">
 
-    <h1 class="xl:px-24 px-2 xl:text-4xl text-white xl:pt-10 pt-2 xl:pb-8 pb-2 font-bold">PORTFOLIO</h1>
+    <h1 class="text-center text-5xl md:text-7xl font-semibold tracking-tighter text-white mb-24 opacity-90">
+        Portfolio.
+    </h1>
 
-    <div class="columns text-white xl:gap-4 gap-1 xl:px-24 px-1">
-        {columns.map((col, index) => (
-            <div class={`column xl:gap-4 gap-1 ${index % 2 === 0 ? 'column-reverse' : ''}`}>
-                {col.map((url) => (
-                    <FigureColumn
-                        url={url}
-                        title={`Foto ${url.split('/').pop().split('.')[0]}`}
-                    />
-                ))}
-            </div>
-        ))}
+    <div class="columns-wrapper relative">
+        <!-- Degradados superior e inferior para suavizar la entrada/salida de las imágenes -->
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black via-black/80 to-transparent z-10"></div>
+        <div class="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent z-10"></div>
+
+        <div class="columns grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            {columns.map((col, index) => (
+                <div class={`column flex flex-col gap-8 lg:gap-12 ${index % 2 !== 0 ? 'column-reverse' : ''}`}>
+                    {col.map((url) => (
+                        <FigureColumn
+                            url={url}
+                            title={`Foto ${url.split('/').pop().split('.')[0]}`}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
     </div>
 </div>
 
 <style>
-    /* Base styles (Mobile first) */
-    .columns {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
+    /* Estilos base para la animación de scroll */
+    .columns-wrapper {
+        overflow: hidden;
+        /* Altura mínima para asegurar que el scroll funcione bien */
+        min-height: 100vh;
     }
 
-    .column {
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* Desktop / Large screens configuration */
+    /* Configuración solo para escritorio */
     @media (min-width: 1024px) {
-        /* Three column layout */
-        .columns {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            overflow-y: hidden;
-        }
-
-        /* Shift entire column up, but not so much that it goes out of view */
+        /* La columna central se mueve en dirección opuesta (hacia arriba) al hacer scroll hacia abajo */
         .column-reverse {
-            transform: translateY(calc(-100% + 100vh));
-            flex-direction: column-reverse;
+            transform: translateY(0); /* Punto inicial */
         }
 
-        /* Set up Animation */
-        @keyframes adjust-position {
-            /* Start position: shift entire column up */
-            from {
-                transform: translateY(calc(-100% + 100vh));
-            }
-
-            /* End position: shift entire column down */
-            to {
-                transform: translateY(calc(100% - 100vh));
-            }
+        /* Definimos la animación vinculada al scroll */
+        @keyframes scroll-up {
+            from { transform: translateY(10%); }
+            to { transform: translateY(-40%); }
         }
 
-        /* Hook our animation with the timeline to our columns */
+        @keyframes scroll-down {
+            from { transform: translateY(-40%); }
+            to { transform: translateY(10%); }
+        }
+
+        /* Aplicamos las animaciones */
+        .column:not(.column-reverse) {
+            animation: scroll-up linear;
+            animation-timeline: scroll(root block);
+        }
+
         .column-reverse {
-            animation: adjust-position linear forwards;
+            animation: scroll-down linear;
             animation-timeline: scroll(root block);
         }
     }
 </style>
 
 <script>
-    // Only run animation logic on large screens where the layout supports it
+    // Fallback para navegadores que no soporten CSS Scroll Timeline nativo
     if (window.matchMedia("(min-width: 1024px)").matches) {
-        const columnsContainer = document.querySelector(".columns");
+        // Verificamos soporte de CSS puro, si no, usamos JS (opcional, pero recomendado para compatibilidad)
+        const isScrollTimelineSupported = CSS.supports("animation-timeline: scroll()");
 
-        if (columnsContainer) {
-            // As we're about to shift content out of .columns, we need it to hide its overflow
-            columnsContainer.style.overflowY = "hidden";
-
-            // Check if ScrollTimeline is supported before using it
-            if (typeof ScrollTimeline !== 'undefined') {
-                const timeline = new ScrollTimeline({
-                    source: document.documentElement,
-                });
-
-                // Loop all eligible columns
-                document.querySelectorAll(".column-reverse").forEach(($column) => {
-                    // Flip item order in reverse columns
-                    $column.style.flexDirection = "column-reverse";
-
-                    // Hook Animation
-                    $column.animate(
-                        {
-                            transform: [
-                                "translateY(calc(-100% + 100vh))",
-                                "translateY(calc(100% - 100vh))"
-                            ]
-                        },
-                        {
-                            fill: "both",
-                            timeline
-                        }
-                    );
-                });
-            }
+        if (!isScrollTimelineSupported) {
+            console.log("CSS Scroll Timeline no soportado, activando fallback JS...");
+            // Aquí podrías añadir un fallback con IntersectionObserver o evento scroll si fuera crítico
+            // Por ahora, el diseño degradará elegantemente a columnas estáticas.
         }
     }
 </script>
